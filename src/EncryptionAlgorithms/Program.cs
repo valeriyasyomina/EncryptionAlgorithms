@@ -13,29 +13,24 @@ namespace EncryptionAlgorithms
         {
             try
             {
-                int[] bytes = new int[7];
-                bytes[0] = 101;
-                bytes[1] = 67;
-                bytes[2] = 201;
-                bytes[3] = 0;
-                bytes[4] = 57;
-                bytes[5] = 0;
-                bytes[6] = 10;
-              //  Console.WriteLine("Input filename: ");
-               // string fileName = Console.ReadLine();
+                Console.WriteLine("Input file name for encryption: ");
+                string fileNameSourse = Console.ReadLine(); 
+  
+                Console.WriteLine("Input encrypted filename: ");
+                string fileNameEncrypt = Console.ReadLine();   
+           
+                RSA rsa = new RSA(); 
+                rsa.GenerateKeys();
 
-               /* using (FileStream file = new FileStream(@"C:\Users\valeriya\Desktop\view.txt", FileMode.Open, FileAccess.Read))
-                {
-                    bytes = new byte[file.Length];
-                    file.Read(bytes, 0, (int)file.Length);
-                }*/
+                rsa.Encrypt(fileNameSourse, fileNameEncrypt, rsa.PUBLIC_KEY_FILE_NAME);
+                Console.WriteLine("File encrypted!");
 
-                RSA rsa = new RSA(3, 11);
-            //    int[] bytesAsInts = Array.ConvertAll(bytes, c => (int)c);
-                int[] messsage = rsa.EncryptMessage(bytes);
+                Console.WriteLine("Input file name for decryption: ");
+                string fileNameDecrypt = Console.ReadLine();
+                rsa.Decrypt(fileNameEncrypt, fileNameDecrypt, rsa.PRIVATE_KEY_FILE_NAME);
 
-                int[] dec = rsa.DecryptMessage(messsage);
-
+                Console.WriteLine("File decrypted!");
+                Console.ReadLine();
                 
             }
             catch (Exception exception)

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace EncryptionAlgorithms
 {
-    interface IEncryptionAlgorithms
+    public class RSAKey
     {
-        int[] EncryptMessage(int[] message);
-        int[] DecryptMessage(int[] message);
+        public Int64 data { get; set; }
+        public Int64 N {get; set;}
+       
     }
 }
