@@ -25,15 +25,43 @@ namespace EncryptionAlgorithms
             N = P * Q;
             M = (P - 1) * (Q - 1);
 
-            E = GetRelativelySimpleNumber(M);
+           // E = GetRelativelySimpleNumber(M);
+            E = 7;
+            D = 3;
+           
         }
-        public byte[] EncryptMessage(byte[] message)
-        {            
-            return null;
+        public int[] EncryptMessage(int[] message)
+        { 
+            if (message.Length == 0)
+            {
+                throw new Exception("Error! Empty message!");
+            }
+            int[] encryptedMessage = new int[message.Length];
+
+            for (int i = 0; i < message.Length; i++)
+            {
+                encryptedMessage[i] = PowFast(message[i], E, N);
+            }
+            return encryptedMessage;
         }
-        public byte[] DecryptMessage(byte[] message)
+        public int[] DecryptMessage(int[] message)
         {
-            return null;
+            if (message.Length == 0)
+            {
+                throw new Exception("Error! Empty message!");
+            }
+            int[] decryptedMessage = new int[message.Length];
+
+            for (int i = 0; i < message.Length; i++)
+            {
+                decryptedMessage[i] = PowFast(message[i], D, N);
+            }
+            return decryptedMessage;
+        }
+
+        private void ExtendedEuclidsAlgorithm()
+        {
+
         }
         /// <summary>
         /// Находит взаимно простое число с number, меньшее number
@@ -72,6 +100,25 @@ namespace EncryptionAlgorithms
                 }
             }
             return tmpFirstNumber + tmpSecondNumber;
+        }
+
+        /// <summary>
+        /// Алгоритм быстроего возведения числа в степень по модулю
+        /// </summary>
+        /// <param name="symbol">возводимое число</param>
+        /// <param name="key">степень</param>
+        /// <param name="n">число, по которому берется модуль</param>
+        /// <returns>Число, возведенное в степень по модулю</returns>
+        private int PowFast(int symbol, int key, int n)
+        {
+            int r = 1;
+            int keyCount = 0;
+            while (keyCount < key)
+            {
+                keyCount++;               
+                r = (r * symbol) % n;                
+            }
+            return r;
         }
     }
 }

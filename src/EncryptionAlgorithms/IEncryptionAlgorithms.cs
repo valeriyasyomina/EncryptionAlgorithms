@@ -8,7 +8,7 @@ namespace EncryptionAlgorithms
 {
     interface IEncryptionAlgorithms
     {
-        byte[] EncryptMessage(byte[] message);
-        byte[] DecryptMessage(byte[] message);
+        int[] EncryptMessage(int[] message);
+        int[] DecryptMessage(int[] message);
     }
 }
