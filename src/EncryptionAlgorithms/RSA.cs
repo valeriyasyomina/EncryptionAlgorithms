@@ -58,7 +58,7 @@ namespace EncryptionAlgorithms
             while (i < arraySize) 
             {
                 isSimpleNumber = true;
-                for (Int64 j = 2; j < number / 2 + 1; j++)
+                for (Int64 j = 2; j < Math.Sqrt(number) /*number / 2 + 1*/; j++)
                 {
                     if (number % j == 0)
                     {
@@ -132,7 +132,7 @@ namespace EncryptionAlgorithms
 
             return (x % n + n) % n;
         }
-
+        
         public void Encrypt(string sousreFileName, string destFileName, string keyFilename)
         {
             RSAKey publicKey = KeyFileReader.ReadKey(keyFilename);
@@ -208,12 +208,15 @@ namespace EncryptionAlgorithms
         /// <returns>Число, возведенное в степень по модулю</returns>
         private Int64 PowModFast(Int64 symbol, Int64 key, Int64 n)
         {
+            Int64 k = key;
             Int64 r = 1;
-            Int64 keyCount = 0;
-            while (keyCount < key)
+            Int64 tmpSymbol = symbol;
+            while (k > 0)
             {
-                keyCount++;               
-                r = (r * symbol) % n;                
+                if (k % 2 == 1)
+                    r = (r * tmpSymbol) % n;
+                tmpSymbol = (tmpSymbol * tmpSymbol) % n;
+                k = k / 2;
             }
             return r;
         }
