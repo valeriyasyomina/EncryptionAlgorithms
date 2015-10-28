@@ -23,8 +23,7 @@ namespace EncryptionAlgorithms
                     Console.WriteLine("Input encrypted filename: ");
                     string fileNameEncrypt = Console.ReadLine();
 
-                    RSA rsa = new RSA();
-                    rsa.GenerateKeys();
+                    RSA rsa = new RSA();                    
                     rsa.Encrypt(fileNameSourse, fileNameEncrypt, rsa.PUBLIC_KEY_FILE_NAME);
 
                     Console.WriteLine("File encrypted!");
