@@ -204,6 +204,10 @@ namespace EncryptionAlgorithms
 
             GenerateSecretKey();
         }
+
+        /// <summary>
+        /// Расширяет ключи, то есть создает раундовые ключи по секретному
+        /// </summary>
         public void GenerateRaundKeys()
         {            
             int i = 0;
@@ -243,6 +247,11 @@ namespace EncryptionAlgorithms
                 }
             }                
         }
+        /// <summary>
+        /// Шифрует файл
+        /// </summary>
+        /// <param name="source">Входной файл</param>
+        /// <param name="dest">Зашифрованный файл</param>
         public void EncipherFile(string source, string dest)
         {
             byte[] bytesToEncipher;
@@ -258,6 +267,11 @@ namespace EncryptionAlgorithms
                 file.Write(encipheredBytes, 0, encipheredBytes.Length);
             }
         }
+        /// <summary>
+        /// Расшифровывает файл
+        /// </summary>
+        /// <param name="source">Зашифрованный файл</param>
+        /// <param name="dest">Расшифрованный файл</param>
         public void DecipherFile(string source, string dest)
         {
             byte[] bytesToDecipher;
@@ -274,7 +288,11 @@ namespace EncryptionAlgorithms
             }
         }
 
-
+        /// <summary>
+        /// Зашифровывает сообщение любой длины, переданное в байтах
+        /// </summary>
+        /// <param name="message">Переданное сообщение</param>
+        /// <returns>Зашифрованное сообщение</returns>
         private byte[] EncipherMessage(byte[] message)
         {
             int arraySize = 0;
@@ -295,7 +313,11 @@ namespace EncryptionAlgorithms
             }
             return encipheredMessage;
         }
-
+        /// <summary>
+        /// Расшифровывает сообщение любой длины
+        /// </summary>
+        /// <param name="message">Зашифрованное сообщение</param>
+        /// <returns>Расшифрованное сообщение</returns>
         private byte[] DecipherMessage(byte[] message)
         {
             byte[] decipheredMessage = new byte[message.Length];
@@ -317,6 +339,11 @@ namespace EncryptionAlgorithms
             return resultDecipheredMsg;
         }
 
+        /// <summary>
+        /// Урезает массив блок при расшифровке
+        /// </summary>
+        /// <param name="array">Блок данных</param>
+        /// <returns>Сокращенный блок данных</returns>
         private byte[] DecipherShorter(byte[] array)
         {
             if (array.Length > 0)
@@ -374,7 +401,12 @@ namespace EncryptionAlgorithms
             return blockData;
         }
 
-        private byte[] EncipherDataBlock(byte[] blockData)   // шифрует блок данных по 16 байт (128 бит)
+        /// <summary>
+        /// Шифрует блок данных по 128 бит
+        /// </summary>
+        /// <param name="blockData">Блок данных</param>
+        /// <returns>Зашифрованный блок данных</returns>
+        private byte[] EncipherDataBlock(byte[] blockData)  
         {
             byte[,] encipheredBlockData = FormMatrixFromArray(blockData);
 
@@ -394,8 +426,12 @@ namespace EncryptionAlgorithms
             }    
             return FormArrayFromMatrix(encipheredBlockData, blockData.Length);
         }
-
-        private byte[] DecipherDataBlock(byte[] blockData)   // шифрует блок данных по 16 байт (128 бит)
+        /// <summary>
+        /// Расшифровывает блок данных по 128 бит
+        /// </summary>
+        /// <param name="blockData">Блок данных</param>
+        /// <returns>Расшифрованный блок данных</returns>
+        private byte[] DecipherDataBlock(byte[] blockData)   
         {
             byte[,] decipheredBlockData = FormMatrixFromArray(blockData);
 
@@ -417,6 +453,11 @@ namespace EncryptionAlgorithms
             return FormArrayFromMatrix(decipheredBlockData, blockData.Length);
         }
 
+        /// <summary>
+        /// Формирует матрицу из массива
+        /// </summary>
+        /// <param name="array">Массива</param>
+        /// <returns>Матрица</returns>
         private byte[,] FormMatrixFromArray(byte[] array)
         {
             byte[,] matrix = new byte[Nk, Nb];
@@ -426,6 +467,12 @@ namespace EncryptionAlgorithms
             return matrix;
         }
 
+        /// <summary>
+        /// Формирует массив заданного размера из матрицы
+        /// </summary>
+        /// <param name="matrix">Матрица</param>
+        /// <param name="arraySize">Размер массива</param>
+        /// <returns>Массив</returns>
         private byte[] FormArrayFromMatrix(byte[,] matrix, int arraySize)
         {
             byte[] array = new byte[arraySize];
@@ -469,6 +516,11 @@ namespace EncryptionAlgorithms
             }
         }
 
+        /// <summary>
+        /// Перемешивает столбцы внутри матрицы данных
+        /// </summary>
+        /// <param name="blockData">Матрица данных</param>
+        /// <returns>Матрица данных с перемешанными столбцами</returns>
         private byte[,] MixColumns(byte[,] blockData)
         {
             byte[,] result = new byte[Nk, Nb];
@@ -495,7 +547,11 @@ namespace EncryptionAlgorithms
             }
             return result;
         }
-
+        /// <summary>
+        /// Производит обратное перемешивание столбцов в матрице данных
+        /// </summary>
+        /// <param name="blockData">Матрица данных</param>
+        /// <returns>Матрица данных с перемешанными столбцами</returns>
         private byte[,] InvMixColumns(byte[,] blockData)
         {
             byte[,] result = new byte[Nk, Nb];
@@ -523,6 +579,12 @@ namespace EncryptionAlgorithms
             return result;
         }
 
+        /// <summary>
+        /// Умножает 2 байта в поле Галуа
+        /// </summary>
+        /// <param name="firstByte">Первый байт</param>
+        /// <param name="secondByte">Второй байт</param>
+        /// <returns>Результат умножения</returns>
         private byte MultGalua(byte firstByte, byte secondByte)
         {
             byte resultByte = 0;
@@ -553,6 +615,12 @@ namespace EncryptionAlgorithms
             return resultByte;
         }
 
+        /// <summary>
+        /// Выделяет столбцец из матрицы по индексу
+        /// </summary>
+        /// <param name="blockData">Матрица данных</param>
+        /// <param name="columnNumber">Номер столбца</param>
+        /// <returns>Столбец</returns>
         private byte[] GetColumnFromMatrix(byte[,] blockData, int columnNumber)
         {
             byte[] column = new byte[Nk];
@@ -561,13 +629,20 @@ namespace EncryptionAlgorithms
             return column;
         }
 
+        /// <summary>
+        /// Заменяет баты в матрице данных на соответствующие из таблицы STable
+        /// </summary>
+        /// <param name="blockData">Матрица данных</param>
         private void SubBytes(byte[,] blockData)
         {
             for (int i = 0; i < Nk; i++)
                 for (int j = 0; j < Nb; j++)
                     blockData[i, j] = GetByteFromSTable(blockData[i, j]);
         }
-
+        /// <summary>
+        /// Заменяет баты в матрице данных на соответствующие из таблицы InvSTable
+        /// </summary>
+        /// <param name="blockData">Матрица данных</param>
         private void InvSubBytes(byte[,] blockData)
         {
             for (int i = 0; i < Nk; i++)
@@ -575,6 +650,11 @@ namespace EncryptionAlgorithms
                     blockData[i, j] = GetByteFromInvSTable(blockData[i, j]);
         }
 
+        /// <summary>
+        /// Производит операцию XOR блока данных с ключом
+        /// </summary>
+        /// <param name="blockData">Блок данных</param>
+        /// <param name="key">Ключ</param>
         private void XORBlockDataWithKey(byte[,] blockData, byte[,] key)
         {
             for (int i = 0; i < Nk; i++)
@@ -582,6 +662,11 @@ namespace EncryptionAlgorithms
                     blockData[i, j] = (byte)(blockData[i, j] ^ key[i, j]);
         }
 
+        /// <summary>
+        /// Возвращает раундовый ключ из массива ключей, соответствующий заданному индексу
+        /// </summary>
+        /// <param name="index">Индекс ключа</param>
+        /// <returns>Раундовый ключ</returns>
         private byte[,] GetRaundKey(int index)
         {
             byte[,] key = new byte[Nk, Nb];
@@ -591,12 +676,20 @@ namespace EncryptionAlgorithms
             return key;
         }
 
+        /// <summary>
+        /// Генерирует секрутный ключ случайным образом
+        /// </summary>
         private void GenerateSecretKey()
         {
             Random random = new Random(DateTime.Now.Millisecond);
             random.NextBytes(secretKey);
         }
 
+        /// <summary>
+        /// Производит циклический сдвиг слвоа
+        /// </summary>
+        /// <param name="word">Слово</param>
+        /// <returns>Циклически сдвинутое новое слово</returns>
         private byte[] RotateWord(byte[] word)
         {
             byte[] rotatedWord = new byte[word.Length];
@@ -608,6 +701,11 @@ namespace EncryptionAlgorithms
             return rotatedWord;
         }
 
+        /// <summary>
+        /// Заменяет биты в блоке данных на соотвт. байты из таблицы STable
+        /// </summary>
+        /// <param name="word">Блок данных</param>
+        /// <returns>Новые блок данных</returns>
         private byte[] SubWord(byte[] word)
         {
             byte[] subWord = new byte[word.Length];
@@ -620,16 +718,31 @@ namespace EncryptionAlgorithms
             return subWord;
         }
 
+        /// <summary>
+        /// Получет байт из таблицы STable, соотве. заданному байту
+        /// </summary>
+        /// <param name="symbol">Входной байт</param>
+        /// <returns>Соотв. байт из таблицы STable</returns>
         private byte GetByteFromSTable(byte symbol)
         {
             return STable[symbol / 16, symbol % 16];
         }
 
+        /// <summary>
+        /// Получет байт из таблицы InvSTable, соотве. заданному байту
+        /// </summary>
+        /// <param name="symbol">Входной байт</param>
+        /// <returns>Соотв. байт из таблицы InvSTable</returns>
         private byte GetByteFromInvSTable(byte symbol)
         {
             return InvSTable[symbol / 16, symbol % 16];
         }
 
+        /// <summary>
+        /// Получение столбца из таблицы RCon по заданному индексу
+        /// </summary>
+        /// <param name="index">Индекс столбца</param>
+        /// <returns>Столбец</returns>
         private byte[] GetRCon(int index)
         {
             byte[] array = new byte[Nb];
@@ -642,6 +755,12 @@ namespace EncryptionAlgorithms
             return array;
         }
 
+        /// <summary>
+        /// Производит операцию XOR с двумя массивами байт
+        /// </summary>
+        /// <param name="firstWord">Первый массив</param>
+        /// <param name="secondWord">Второй массив</param>
+        /// <returns>Результат операции XOR</returns>
         private byte[] XorWords(byte[] firstWord, byte[] secondWord)
         {
             byte[] resultWord = new byte[firstWord.Length];
