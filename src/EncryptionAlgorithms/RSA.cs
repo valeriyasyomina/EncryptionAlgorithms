@@ -144,8 +144,7 @@ namespace EncryptionAlgorithms
                 using (BinaryReader binaryReader = new BinaryReader(sourseFileStream))
                 {
                     while (binaryReader.BaseStream.Position != binaryReader.BaseStream.Length)
-                    {
-                        Console.WriteLine("Byte encrypted");
+                    {                      
                         binaryWriter.Write(PowModFast(Convert.ToInt64(binaryReader.ReadByte()), publicKey.data, publicKey.N));
                     }
                 }
@@ -165,8 +164,7 @@ namespace EncryptionAlgorithms
                 using (BinaryReader binaryReader = new BinaryReader(sourseFileStream))
                 {
                     while (binaryReader.BaseStream.Position != binaryReader.BaseStream.Length)
-                    {
-                        Console.WriteLine("Byte decrypted");                 
+                    {                                    
                         binaryWriter.Write(Convert.ToByte(PowModFast(binaryReader.ReadInt64(), privateKey.data, privateKey.N)));
                     }
                 }
